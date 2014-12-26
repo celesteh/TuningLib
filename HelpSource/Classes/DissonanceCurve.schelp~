@@ -1,0 +1,245 @@
+CLASS:: DissonanceCurve
+summary:: (put short description here)
+categories:: Undocumented classes
+related:: Classes/SomeRelatedClass, Reference/SomeRelatedStuff, etc.
+
+DESCRIPTION::
+(put long description here)
+
+
+CLASSMETHODS::
+
+METHOD:: new
+(describe method here)
+
+argument:: freqs
+(describe argument here)
+
+argument:: amps
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: just
+(describe method here)
+
+argument:: freqs
+(describe argument here)
+
+argument:: amps
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: fm
+(describe method here)
+
+argument:: carrier
+(describe argument here)
+
+argument:: modulator
+(describe argument here)
+
+argument:: depth
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: fft
+(describe method here)
+
+argument:: buffer
+(describe argument here)
+
+argument:: size
+(describe argument here)
+
+argument:: cutoff
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+argument:: action
+(describe argument here)
+
+returns:: (returnvalue)
+
+
+INSTANCEMETHODS::
+
+METHOD:: curve
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: cents_scale
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: just_curve
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: just_scale
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: fmInit
+(describe method here)
+
+argument:: carrier
+(describe argument here)
+
+argument:: modulator
+(describe argument here)
+
+argument:: depth
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: initFromFFT
+(describe method here)
+
+argument:: buffer
+(describe argument here)
+
+argument:: size
+(describe argument here)
+
+argument:: cutoff
+(describe argument here)
+
+argument:: highInterval
+(describe argument here)
+
+argument:: action
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: init
+(describe method here)
+
+argument:: freq
+(describe argument here)
+
+argument:: amp
+(describe argument here)
+
+argument:: high
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: tuning
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: scale
+(describe method here)
+
+argument:: size
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: plot
+(describe method here)
+
+returns:: (returnvalue)
+
+METHOD:: digestibleTuning
+(describe method here)
+
+argument:: window
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: digestibleScale
+(describe method here)
+
+argument:: window
+(describe argument here)
+
+argument:: size
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: pr_compute_partial_sethares
+(describe method here)
+
+argument:: interval
+(describe argument here)
+
+argument:: numpartials
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: pr_compute_partial_just
+(describe method here)
+
+argument:: num
+(describe argument here)
+
+argument:: dem
+(describe argument here)
+
+argument:: numpartials
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: pr_find_minima
+(describe method here)
+
+argument:: dcurve
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: pr_rms
+(describe method here)
+
+argument:: dcurve
+(describe argument here)
+
+argument:: window
+(describe argument here)
+
+returns:: (returnvalue)
+
+METHOD:: pr_find_just_scale
+(describe method here)
+
+argument:: window
+(describe argument here)
+
+returns:: (returnvalue)
+
+
+EXAMPLES::
+
+code::
+(some example code)
+::
