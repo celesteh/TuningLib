@@ -13,6 +13,7 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 	var < root;
 	var	< scale;
 	var	rootScale;
+	var <modes;
 
 	*new { |scale, root = 0|
 
@@ -33,6 +34,7 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 		root = rot;
 		rootScale = scale.deepCopy;
 		changes = [root];
+		modes = [];
 	}
 
 	root_ { |newRoot|
@@ -56,32 +58,40 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 
 
 
-	change { | degree|
+	change { | degree, chromatic|
 
 		/*@
 		desc: Change the current Key. This works correct with both ET and JI.
-		degree: The degree of the scale to modulate by. If nil, revert to previous state.
+		degree: The degree of the scale to modulate by. If it and chromatic are nil, revert to previous state.
+		chromatic: the chromatic interval to modulate by
 		ex:
-		k = Key(Scale.choose);
+		k = Key(Scale.major);
 		k.scale.degrees;
-		k.scale.cents;
+		k.scale.semitones;
 		k.change(4); // modulate to the 5th scale degree (we start counting with 0)
 		k.scale.degrees;
-		k.scale.cents;
+		k.scale.semitones;
 		k.change(4); // modulate to the 5th scale degree (in the new key)
 		k.scale.degrees;
-		k.scale.cents;
+		k.scale.semitones;
 		k.change; // modulate back from the V/V degree
 		k.scale.degrees;
-		k.scale.cents;
+		k.scale.semitones;
 		k.change; // modulate back from the 5th scale degree
 		k.scale.degrees;
-		k.scale.cents;
+		k.scale.semitones;
+		k.change(chromatic:3); // modulate by a minor third
+		k.scale.degrees;
+		k.scale.semitones;
+		k.change; // back to home key again
+		k.scale.degrees;
+		k.scale.semitones;
+
 		@*/
 
 		var newRoot;
 
-		if (degree.isNil,  // if no argument, then...
+		if ((degree.isNil && chromatic.isNil),  // if no argument, then...
 			{
 				if(changes.size>0,
 					{this.root_(changes.pop.neg)}, //... return to the previous key
@@ -89,9 +99,13 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 				);
 			},
 			{
+				newRoot = chromatic;
+				newRoot.isNil.if({
 
-				newRoot = scale.degrees.wrapAt(degree);
-				"root %\n".postf(newRoot);
+					newRoot = scale.degrees.wrapAt(degree);
+					"root %\n".postf(newRoot);
+				});
+
 				changes = changes ++ newRoot;
 				this.root_(newRoot);
 				"changed".postln;
@@ -247,5 +261,49 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 		{"the round argument must be one of: 'up', 'down', or 'off'.".error});
 	}
 
+	mode_ { |mode|
+		/*@
+		desc: changes the mode of the current key
+		mode: an array of degrees or a key from ScaleInfo. If nil, it revcerts to previous mode
+		ex:
+			k = Key(Scale.major);
+			k.scale.degrees;
+			k.scale.semitones;
+			k.mode_(\minor);
+			k.scale.degrees;
+			k.scale.semitones;
+			k.scale([0, 2, 4, 6, 8, 10, 11]);
+			k.scale.degrees;
+			k.scale.semitones;
 
+		@*/
+		var newScale, newRoot, record = true;
+
+		mode.isNil.if({
+			record = false;
+			if (modes.size>0,
+				{ mode = modes.pop; },
+				{ "already in original mode".error; }
+			);
+		});
+
+		mode.postln;
+		mode.notNil.if({
+			mode.isKindOf(ArrayedCollection).if(
+				{
+					newScale = Scale(mode, scale.pitchesPerOctave, scale.tuning);
+					newRoot = Scale(mode, rootScale.pitchesPerOctave, rootScale.tuning);
+					//"array".postln;
+				},
+				{
+					newScale = Scale.newFromKey(mode, scale.tuning);
+					newRoot = Scale.newFromKey(mode, rootScale.tuning);
+				}
+			);
+
+			if (record, { modes = modes.add(scale.degrees); });
+			rootScale = newRoot;
+			scale = newScale;
+		})
+	}
 }
