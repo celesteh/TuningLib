@@ -1,4 +1,4 @@
-// This code by Charles C�leste Hutchins, with some code ported to SC from code written by Morgan Tunder
+// This code by Charles Celeste Hutchins, with some code ported to SC from code written by Morgan Tunder
 // Mostly based on the writing of Bill Sethares
 // With some additional ideas of Musicquantics by Clarence Barlow
 
@@ -139,7 +139,7 @@ For more information,
 
 			sin = SinOsc.ar(SinOsc.ar(modulator, 0, depth, carrier));
 			Out.ar(out, sin * amp);
-		}).memStore;
+		}).add;
 	)
 	(
 		var carrier, modulator, depth, curve, scale;
@@ -506,7 +506,8 @@ For more information,
 
 	justScale{ |window = 100, size = inf|
 	/*@
-	desc: Returns a scale based on the justTuning.	window: The window size used to compute the digestibleTuning
+	desc: Returns a scale based on the justTuning.
+	window: The window size used to compute the justTuning
 	size: The number of degrees of the scale. For size n, it pickes the n most consonant degrees. Defaults to inf, which makes a Scale degree for every degree of the Tuning.
 	@*/
 		var tuning, degrees, scale, tune, tuning_cents, index;

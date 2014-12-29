@@ -61,7 +61,7 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 	change { | degree, chromatic|
 
 		/*@
-		desc: Change the current Key. This works correct with both ET and JI.
+		desc: Change the current Key. This works correctly with both ET and JI.
 		degree: The degree of the scale to modulate by. If it and chromatic are nil, revert to previous state.
 		chromatic: the chromatic interval to modulate by
 		ex:
@@ -184,7 +184,7 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 	quantizeCents { |cent, round = 'off', gravity = 1|
 		/*@
 		desc: snaps a cents value to the nearest semitone in the current key
-		cents: the cents to be quantized, or an array of cents
+		cents: the cents value to be quantized, or an array of cents
 		round: has three modes:
 			\off  do not round the answer
 			\up   round the answer to the nearest scale freq above
