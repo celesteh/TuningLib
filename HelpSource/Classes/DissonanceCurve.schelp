@@ -1,7 +1,7 @@
 CLASS:: DissonanceCurve
 summary:: Analyzes timbres in order to create tunings
 categories:: Tuning>TuningLib
-related::  http://eceserv0.ece.wisc.edu/~sethares/consemi.html
+related::  Tuning, Scale, http://eceserv0.ece.wisc.edu/~sethares/consemi.html
 
 DESCRIPTION::
 
@@ -228,3 +228,4 @@ Pbind(
 ).play;
 )
 ::
+The pbind will generate a midinote based on the degree chosen and the scale. This will be a floating point number. When we use this number in the synthDef, it will give us a useful ratio and generate the correct notes. 
