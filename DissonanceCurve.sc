@@ -453,7 +453,9 @@ For more information,
 	compares the ratio relationships between the partials.  The numerator and denominator of this
 	ratio is summed and then multiplied by the amplitude of the quieter partial.
 		@*/
-		DeprecatedError(this, "digestibleTuning", "justTuning", DissonanceCurve).throw
+		//DeprecatedError(this, this.digestibleTuning, this.justTuning, DissonanceCurve).throw;
+		this.deprecated(thisMethod, DissonanceCurve.findMethod(\justTuning));
+		^this.justTuning(window);
 	}
 
 	justTuning { |window = 100|
@@ -500,8 +502,28 @@ For more information,
 		^Tuning(tuning, highInterval, "Dissonance Curve");
 	}
 
+	postJust {
+		var str;
+		str = "[";
+
+		if (just_scale.isNil, {
+			this.justScale;
+		});
+
+		just_scale.do({|d|
+			str = str + "%/% ".format(d.numerator, d.denominator);
+		});
+
+
+		str = str + "]";
+
+		str.postln;
+	}
+
 	digestibleScale{ |window = 100, size = inf|
-		DeprecatedError(this, "digestibleScale", "justScale", DissonanceCurve).throw
+		//DeprecatedError(this, thisMethod, this.justScale, DissonanceCurve).throw;
+		this.deprecated(thisMethod, DissonanceCurve.findMethod(\justScale));
+		^this.justScale(window, size);
 	}
 
 	justScale{ |window = 100, size = inf|

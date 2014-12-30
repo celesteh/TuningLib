@@ -58,7 +58,7 @@ code::
 	modulator = 600;
 	depth = 100;
 
-	curve = DissonanceCurve.fm(carrier, modulator, depth, 2);
+	curve = DissonanceCurve.fm(carrier, modulator, depth, 1202);
 	scale = curve.scale;
 
 )
@@ -151,8 +151,18 @@ The number of degrees of the scale. For size n, it pickes the n most consonant d
 returns:: a link::Classes/Scale::
 
 
+METHOD:: postJust
+Posts the ratios for the just scale.
+You must compute the scale first;
 
-
+discussion::
+code::
+(
+d = DissonanceCurve.fm(440, 600, 100, 1202);
+d.justScale(100);
+d.postJust;
+)
+::
 
 
 EXAMPLES::
