@@ -1,7 +1,7 @@
 TITLE:: Key
 summary:: Handles key changes
 categories::  Tuning>TuningLib
-related:: Scale, Tuning
+related:: Classes/Scale, Classes/Tuning
 
 DESCRIPTION::
 Keeps track of key changes and adjusts the tuning of the current scale accordingly.
@@ -15,6 +15,9 @@ create a Key
 
 ARGUMENT:: scale
 The current scale
+
+ARGUMENT:: root
+The index of the scale root
 
 
 

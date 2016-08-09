@@ -42,6 +42,12 @@ DissonanceInterval
 
 	ratio {
 
+
+		(numerator.isNil || denominator.isNil).if({
+			"Not a just interval".warn;
+			^interval
+		});
+
 		^ (numerator / denominator)
 	}
 
@@ -69,15 +75,25 @@ DissonanceInterval
 	}
 
 
-	== { arg other;
+	!= { arg other;
 
 		other.isKindOf(DissonanceInterval).if ({
 
-			^ (interval == other.interval)
+			^ (interval != other.interval)
 		}, {
 			^nil
 		});
 
+	}
+
+	== { arg other;
+		var ret;
+
+		ret = (this != other);
+		ret.notNil.if({
+			^ret.not;
+		});
+		^ret
 	}
 
 
@@ -160,7 +176,7 @@ For more information,
 
 	}
 
-	* fft { arg buffer, size, cutoff = 0.001, highInterval = 1902, action;
+	* fft { arg buffer, size, cutoff = -60, highInterval = 1902, action;
 	/*@
 	desc: Create a curve based on the timbre of a given FFT buffer. THIS IS VERY SLOW and uses a lot of system resources
 	buffer: An FFT Buffer
@@ -211,7 +227,7 @@ For more information,
 	}
 
 
-	initFromFFT{ | buffer, size, cutoff = 0.001, highInterval = 1902, action|
+	initFromFFT{ | buffer, size, cutoff = -60, highInterval = 1902, action|
 
 		var act;
 
@@ -222,7 +238,7 @@ For more information,
 			});
 		};
 
-		spectrum = FFTSpectrum(buffer, size, cutoff = 0.001, highInterval = 1902, act);
+		spectrum = FFTSpectrum(buffer, size, cutoff.dbamp, highInterval, act);
 
 
 		/*
@@ -461,7 +477,7 @@ For more information,
 	justTuning { |window = 100|
 		/*@
 		desc: Returns a Tuning related to Sethares' algorithm, but calculated using a just tuning.
-		Basically, it does a comparison of every partial at
+		This does a comparison of every partial at
 		every tuning, but instead of looking at Plomp and Levit's ideas of local consonance, it
 		compares the ratio relationships between the partials.  The numerator and denominator of this
 		ratio is summed and then multiplied by the amplitude of the quieter partial.
@@ -566,7 +582,7 @@ For more information,
 	+ {|other|
 
 		/*@
-		desc: Adding two scales together in a meaningful way
+		desc: Adding two scales together in a meaningful way. This would be useful to figure out a scale that works for two different timbres.
 		other: a Spectrum or a Dissonance Curve
 		@*/
 

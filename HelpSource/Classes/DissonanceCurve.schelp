@@ -1,7 +1,7 @@
 CLASS:: DissonanceCurve
 summary:: Analyzes timbres in order to create tunings
 categories:: Tuning>TuningLib
-related::  Tuning, Scale, http://eceserv0.ece.wisc.edu/~sethares/consemi.html
+related::  Classes/Tuning, Classes/Scale, Classes/Spectrum, http://eceserv0.ece.wisc.edu/~sethares/consemi.html
 
 DESCRIPTION::
 
@@ -121,7 +121,7 @@ Deprecated. Use justTuning
 
 
 METHOD:: justTuning
-Returns a link::Classes/Tuning:: related to Sethares' algorithm, but calculated using a just tuning. Basically, it does a comparison of every partial at every tuning, but instead of looking at Plomp and Levit's ideas of local consonance, it compares the ratio relationships between the partials.  The numerator and denominator of this ratio is summed and then multiplied by the amplitude of the quieter partial.
+Returns a link::Classes/Tuning:: Related to Sethares' algorithm, but calculated using a just tuning. This does a comparison of every partial at every tuning, but instead of looking at Plomp and Levit's ideas of local consonance, it compares the ratio relationships between the partials.  The numerator and denominator of this ratio is summed and then multiplied by the amplitude of the quieter partial.
 
 		This algorythm just gives a list of the relative dissonance at all possible tunings. To figure out scale degrees, the most consonant tuning is picked from it's neighbors, given the window size.
 
@@ -164,6 +164,13 @@ d.postJust;
 )
 ::
 
+METHOD:: +
+Adds two scales together in a meaningful way. This would be useful to figure out a scale that works for two different timbres.
+argument:: other
+a Spectrum or a DissonanceCurve
+
+returns:: a new DissonanceCurve
+
 
 EXAMPLES::
 
@@ -185,10 +192,10 @@ code::
 )
 ::
 
-To use with a Pbind, let's make a synthdef that uses some of the keywords from event, specifically midinote and octave.
+To use with a Pbind, let's make a synthdef that uses some of the keywords from event, specifically freq and octave.
 code::
 (
-SynthDef("fm", {| out = 0, amp = 0.2, midinote = 1, octave = 5, carrier, modulator, depth,
+SynthDef("fm", {| out = 0, amp = 0.2, midinote=1, octave = 5, carrier, modulator, depth,
 	dur = 1, detune = 0|
 
 	var carrierOsc, modulation, env, degree, ratio;
@@ -238,4 +245,4 @@ Pbind(
 ).play;
 )
 ::
-The pbind will generate a midinote based on the degree chosen and the scale. This will be a floating point number. When we use this number in the synthDef, it will give us a useful ratio and generate the correct notes. 
+The pbind will generate a midinote based on the degree chosen and the scale. This will be a floating point number. When we use this number in the synthDef, it will give us a useful ratio and generate the correct notes.
