@@ -364,9 +364,9 @@ Update the help files!
 Add the ability to calculate more spectra - PM, RM AM, etc
 Make some of the method names more reasonable
 
-##Comments / Featture Requests
-key - does it recalc the scale or not
-just dissonance curve - limit tuning ratios
-lattice - make n dimensional
-digestible scale - print scale ratios
+##Comments / Feature Requests
+* key - does it recalc the scale or not
+* just dissonance curve - limit tuning ratios
+* lattice - make n dimensional
+* digestible scale - print scale ratios
 
