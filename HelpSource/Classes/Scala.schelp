@@ -1,0 +1,55 @@
+TITLE:: Scala
+summary:: open Scala files
+categories:: Tuning>TuningLib
+related:: Classes/Tuning, Classes/Scale, http://www.huygens-fokker.org/scala/scl_format.html
+
+DESCRIPTION::
+Reads Scala files and creates a Tuning based on them. It can also generate a Scale that includes every interval in the Tuning. See Tuning for the principle methods.
+
+
+More information about the Scala file format, and a link to the scale library, can be found at:
+
+link::http://www.huygens-fokker.org/scala/scl_format.html::
+
+CLASSMETHODS::
+
+METHOD:: open
+a more intiutive syntax for opening a Scala file
+
+ARGUMENT:: path
+path to the Scala file.
+
+returns:: a new Scala object
+
+METHOD:: new
+open a Scala file
+
+ARGUMENT:: path
+path to the Scala file.
+
+
+
+INSTANCEMETHODS::
+
+METHOD:: scale
+Generates a link::Classes/Scale:: which contains as a degree every step in the tuning
+
+
+
+EXAMPLES::
+
+code::
+// Example 1
+
+		a = Scala("slendro.scl");
+		b = a.scale;
+
+
+
+// Example 2
+
+		File.openDialog(nil,
+			{|path| a = Scala(path)});
+
+
+::
