@@ -3,7 +3,7 @@
 	summary:		"A set of tools to calculate and manage tunings,including DissonanceCurves",
 	author: 		"Charles Celeste Hutchins, Jascha Narveson",
 
-	version:		0.13.1, // must be a float
+	version:		0.13.2, // must be a float
 	organization: 	"University of Birmingham",
 	country: 		"UK",
 	since: 		"2009",
