@@ -171,26 +171,38 @@ It also is able to generate and navigate a 2 dimentinal table:
 	// changed API section
 
 	overtones {
-		DeprecatedError(this, \overtones, \identities, Diamond).throw;
+		//DeprecatedError(this, \overtones, \identities, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\identities));
+		^this.identities;
 	}
 
-	overtones_{
-		DeprecatedError(this, \overtones_, \identities_, Diamond).throw;
+	overtones_{|item|
+		//DeprecatedError(this, \overtones_, \identities_, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\identities));
+		^this.identities_(item);
 	}
 
-	makeOvertoneIntervals {
-		DeprecatedError(this, \makeOvertoneIntervals, \d1Intervals, Diamond).throw;
+	makeOvertoneIntervals {|start, orientation, niad=3|
+		//DeprecatedError(this, \makeOvertoneIntervals, \d1Intervals, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\d1Intervals));
+		^this.d1Intervals(start, orientation, niad);
 	}
-	makeTriad {
-       DeprecatedError(this, \makeTriad, \d1Triad, Diamond).throw;
+	makeTriad {|identitity, orientation|
+       //DeprecatedError(this, \makeTriad, \d1Triad, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\d1Triad));
+		^this.d1Triad(identitity, orientation);
 	}
 
-	makeNiad {
-       DeprecatedError(this, \makeNiad, \d1Niad, Diamond).throw;
+	makeNiad {|identity,orientation, n=3|
+       //DeprecatedError(this, \makeNiad, \d1Niad, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\d1Niad));
+		^this.d1Niad(identity,orientation, n);
 	}
 
-	getOvertoneInterval {
-		DeprecatedError(this, \getOvertoneInterval, \d1Interval, Diamond).throw;
+	getOvertoneInterval {|index, orientation|
+		//DeprecatedError(this, \getOvertoneInterval, \d1Interval, Diamond).throw;
+		this.deprecated(thisMethod, Diamond.findMethod(\d1Interval));
+		^this.d1Interval(index, orientation);
 	}
 
 

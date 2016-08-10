@@ -84,7 +84,7 @@ gravity changes the level of attraction ot the in tune frequency.
 
 `k.quantizeFreq(660, 440, \down, 0.5) // half way in tune`
 
-By changing gravity over time, you can have pitched tend towards being in or out of tune.
+By changing gravity over time, you can have pitches tend towards being in or out of tune.
 
 
 
@@ -112,7 +112,7 @@ b = a.scale;
 #Diamond
 (formerly Lattice)
 
-This is actually a partchian tuning diamond (and this class may get a new name in a new release)
+This is a partchian tuning diamond 
 
 `d = Diamond([ 2, 5, 3, 7, 9])`
 
@@ -366,7 +366,5 @@ Make some of the method names more reasonable
 
 ##Comments / Feature Requests
 * key - does it recalc the scale or not
-* just dissonance curve - limit tuning ratios
 * lattice - make n dimensional
-* digestible scale - print scale ratios
 
