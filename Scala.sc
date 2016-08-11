@@ -101,7 +101,9 @@ Scala : Tuning {
 					// watch out for blank lines
 					denominator.isNil.if({ denominator =1 });
 					num = (numerator.asInteger / denominator.asInteger);
+					// get the ratio
 					ratios = ratios ++ num;
+					// put the midi stuff in the tuning
 					num = num.ratiomidi;
 					tuning = tuning ++ num;
 				});
@@ -111,6 +113,7 @@ Scala : Tuning {
 				num = clean_line.asFloat;
 				num = num / 100;
 				tuning = tuning ++ num;
+				// also stuff this into ratios
 				ratios = ratios ++ num.midiratio;
 			});
 		});
@@ -118,8 +121,13 @@ Scala : Tuning {
 		tuning = tuning.addFirst(0); // the interval 1/1 is not explicitly stated in the .scl file
 
 		(tuning.size > pitchesPerOctave).if({
-			octaveRatio = ratios.pop;
-			tuning.pop;
+			// 12.midiratio has rounding error, should be 2, is 1.999etc
+			num = tuning.pop;
+			(num == 12).if ({ // octave
+				octaveRatio = 2;
+			}, {
+				octaveRatio = ratios.pop;
+			});
 		}, {
 			octaveRatio=2
 		});
