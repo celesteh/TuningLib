@@ -91,6 +91,10 @@ Scala : Tuning {
 				});
 			});
 
+			clean_line.endsWith(".").if({
+				clean_line = clean_line.add($0); // 433. is a legal number
+			});
+
 
 			(clean_line.contains(".").not).if({
 
