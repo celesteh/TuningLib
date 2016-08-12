@@ -73,7 +73,7 @@ k.change; // go back
 
 k.scale.degrees;
 ```
-This will keep up through as amny layers of modulations as you want.
+This will keep up through as amny layers of modulations as you want.  These modulations keep track of transpositions in any tuning system. This means, that if you modulate to 3/2 in Just Intonation, it will do all the necessary multiplcations for you. This is compatible with any tuning system.
 
 It also does rounding:
 
@@ -118,11 +118,11 @@ This is a partchian tuning diamond
 
 The array is numbers to use in generated tuning ratios, so this gives:
 
-1/1 5/4 3/2 7/4 9/8   for otonality
-1/1 8/5 4/3 8/7 16/9  for utonality
+* 1/1 5/4 3/2 7/4 9/8   for otonality
+* 1/1 8/5 4/3 8/7 16/9  for utonality
 
-otonality is overtones – the numbers you give are in the numerator
-utonality is undertones – the numbers are in denominator
+* otonality is overtones – the numbers you give are in the numerator
+* utonality is undertones – the numbers are in denominator
 
 all of the other numbers are powers of 2.  You could change that with an optional second argument to any other number, such as 3:
 `d = Diamond([ 2, 3, 5, 7, 11], 3)`
@@ -131,11 +131,11 @@ all of the other numbers are powers of 2.  You could change that with an optiona
 
 
 Diamonds also generate a table:
-1/1 5/4 3/2 7/4 9/8
-8/5 1/1 6/5 7/5 9/5
-4/3 5/3 1/1 7/6 3/2
-8/7 10/7 12/7 1/1 9/7
-16/9 10/9 4/3 14/9 1/1
+|1/1 |5/4 |3/2 |7/4 |9/8|
+|8/5 |1/1 |6/5 |7/5 |9/5|
+|4/3 |5/3 |1/1 |7/6 |3/2|
+|8/7 |10/7|12/7|1/1 |9/7|
+|16/9|10/9|4/3 |14/9|1/1|
 
 It is posisble to walk around this table to make nice triads that are harmonically related:
 ```
@@ -360,11 +360,9 @@ Pbind(
 
 #Future plans
 
-Update the help files!
 Add the ability to calculate more spectra - PM, RM AM, etc
 Make some of the method names more reasonable
 
 ##Comments / Feature Requests
-* key - does it recalc the scale or not
 * lattice - make n dimensional
 

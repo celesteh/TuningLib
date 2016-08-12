@@ -4,7 +4,7 @@ categories::  Tuning>TuningLib
 related:: Classes/Scale, Classes/Tuning
 
 DESCRIPTION::
-Keeps track of key changes and adjusts the tuning of the current scale accordingly.
+Keeps track of key changes and adjusts the tuning of the current scale accordingly. This class works for any tuning system.
 
 Also can quantize a given semitone, cents value or frequency into the currently used scale
 
