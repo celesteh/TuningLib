@@ -34,6 +34,7 @@ The TuningLib quark helps manage this process.
 
 
 First, there is some Scale stuff already in SuperColider.
+
 How to use a scale in a Pbind:
 ```
 (
@@ -78,6 +79,7 @@ This will keep up through as amny layers of modulations as you want.  These modu
 It also does rounding:
 
 `quantizeFreq (freq, base, round , gravity )`
+
 Snaps the feq value in Hz to the nearest Hz value in the current key
 
 gravity changes the level of attraction ot the in tune frequency.
@@ -125,17 +127,21 @@ The array is numbers to use in generated tuning ratios, so this gives:
 * utonality is undertones – the numbers are in denominator
 
 all of the other numbers are powers of 2.  You could change that with an optional second argument to any other number, such as 3:
+
 `d = Diamond([ 2, 3, 5, 7, 11], 3)`
 
 
 
 
 Diamonds also generate a table:
-|1/1 |5/4 |3/2 |7/4 |9/8|
-|8/5 |1/1 |6/5 |7/5 |9/5|
-|4/3 |5/3 |1/1 |7/6 |3/2|
-|8/7 |10/7|12/7|1/1 |9/7|
-|16/9|10/9|4/3 |14/9|1/1|
+
+|      |     |      |     |     |
+|------|-----|------|-----|-----|
+| 1/1  |5/4  | 3/2  |7/4  | 9/8 |
+| 8/5  |1/1  | 6/5  |7/5  | 9/5 |
+| 4/3  |5/3  | 1/1  |7/6  | 3/2 |
+| 8/7  |10/7 | 12/7 |1/1  | 9/7 |
+| 16/9 |10/9 | 4/3  |14/9 | 1/1 |
 
 It is posisble to walk around this table to make nice triads that are harmonically related:
 ```
@@ -303,28 +309,41 @@ The only problem here is that this conflicts entirely with Just Intonation!
 
 For just tunings based on spectra, we would calculate dissonance based on the ratios of the partials of the sound.  Low numbers are more in tune, high numbers are less in tune.
 
-There's only one problem with this:
-Here's a graph of just a sine tone:
+There's only one problem with this, which is visible if we generate a graph of just a sine tone:
 ```
 d = DissonanceCurve([440], [1])
 d.just_curve.collect({|diss| diss.dissonance}).plot
 ```
-How do we pick tuning degrees?
+There is no pattern of minima and maxima. How do we pick tuning degrees?
 
 
 
+There are two answers provided. 
 
-
-We use a moving window where we pick the most consontant tuning within that window.  This defaults to 100 cents, assuming you want something with roughly normal step sizes.
+The first is to use a moving window where we pick the most consontant tuning within that window.  This defaults to 100 cents, assuming you want something with roughly normal step sizes.
 
 
 
 Then to pick scale steps, we can ask for the n most consontant tunings
 
-`t = d.digestibleScale(100, 7); // pick the 7 most consonant tunings``
+`t = d.justScale(100, 7); // pick the 7 most consonant tunings``
 
 
+The other method is to limit the integer size in the ratios. 
+For example, if we pick a limit of 21, neither the numerator or the denominator will be larger than 21.
+For this selection method, we also need to specify how many ratios we want in our tuning 
+(and how many of those we want in our scale).
 
+```
+t = d.limitedJustScale(21, 11, 7); // pick the 11 most consonant tunings limitted by 21
+                 // and put the 7 most consonant tunings into a Scale
+  
+```  
+
+The higher the limit, the more closely related the scale is to the timbre.
+  
+These two methods will produce different scales. 
+If the timbre has a harmonic sound, the scales will be more closely related than if the sound is enharmonic.
 
 
 
@@ -335,7 +354,7 @@ carrier = 440;
 modulator = 600;
 depth = 100;
 curve = DissonanceCurve.fm(carrier, modulator, depth, 1200);
-scale = curve.digestibleScale(100, 7); // pick the 7 most consonant tunings
+scale = curve.justScale(100, 7); // pick the 7 most consonant tunings
 degrees = (0..(scale.size - 1)); // make an array of all the scale degrees (you can't assume the size is 7)
 
 Pbind(
@@ -360,8 +379,8 @@ Pbind(
 
 #Future plans
 
-Add the ability to calculate more spectra - PM, RM AM, etc
-Make some of the method names more reasonable
+* Add the ability to calculate more spectra - PM, RM AM, etc
+* Allow the user to specify how determine the consonance of Just ratios
 
 ##Comments / Feature Requests
 * lattice - make n dimensional
