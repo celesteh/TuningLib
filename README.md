@@ -74,7 +74,7 @@ k.change; // go back
 
 k.scale.degrees;
 ```
-This will keep up through as amny layers of modulations as you want.  These modulations keep track of transpositions in any tuning system. This means, that if you modulate to 3/2 in Just Intonation, it will do all the necessary multiplcations for you. This is compatible with any tuning system.
+This will keep up through as many layers of modulations as you want.  These modulations keep track of transpositions in any tuning system. This means, that if you modulate to 3/2 in Just Intonation, it will do all the necessary multiplcations for you. This is compatible with any tuning system.
 
 It also does rounding:
 
@@ -273,7 +273,7 @@ s.waitForBoot({
 
 
 // We don't know how many pitches per octave  will be until after the
-// DissonanceCurve is calculated.  However, deprees outside of the range
+// DissonanceCurve is calculated.  However, degrees outside of the range
 // will be mapped accordingly.
 
 
