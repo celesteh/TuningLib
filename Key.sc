@@ -125,11 +125,15 @@ Key {
 			ratio = f / base;
 			ratio = Diamond.adjustOctave(ratio, scale.octaveRatio);
 
+			ratio.postln;
+
 			semitone = this.quantize(ratio.ratiomidi, round, 1);
-			result = scale.semitones.indexOf(semitone);
+
+			semitone.postln;
+			result = scale.semitones.indexOf(semitone % scale.pitchesPerOctave);
 
 
-			result = f + ((result - f)* g);
+			//result = f + ((result - f)* g);
 			result;
 
 		};
