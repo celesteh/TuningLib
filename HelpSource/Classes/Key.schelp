@@ -52,15 +52,18 @@ the tone to be quantized, or an array of semitones
 
 ARGUMENT:: round
 		round: has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
-
+list::
+		##	\nearest  round to the nearest scale semitone
+		##	\up   always round to the semitone above
+		##	\down always round to the semitone below
+::
 ARGUMENT:: gravity
 determines how strong the attraction is:
-			1 = fully quantized
-			0 = no quantization
-			0<x<1  interpolate between unquantized and fully quantized values
+list::
+		##	1 = fully quantized
+		##	0 = no quantization
+		##	0<x<1  interpolate between unquantized and fully quantized values
+::
 returns:: quantised semitone
 
 
@@ -78,15 +81,18 @@ The base frequency, or root frequency
 
 ARGUMENT:: round
 has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
-
+list::
+		##	\nearest  round to the nearest scale frequency
+		##	\up   always round to the scale frequency above
+		##	\down always round to the nearest scale freq below
+::
 ARGUMENT:: gravity
 determines how strong the attraction is:
-			1 = fully quantized
-			0 = no quantization
-			0<x<1  interpolate between unquantized and fully quantized values
+list::
+		##	1 = fully quantized
+		##	0 = no quantization
+		##	0<x<1  interpolate between unquantized and fully quantized values
+::
 returns:: quantised frequency
 
 METHOD:: quantizeCents
@@ -97,18 +103,47 @@ the cents value to be quantized, or an array of cents
 
 ARGUMENT:: round
 has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
-
+list::
+		##	\nearest  round to the nearest scale degree
+		##	\up   always round to the degree above
+		##	\down always round to the degree below
+::
 ARGUMENT:: gravity
 determines how strong the attraction is:
-			1 = fully quantized
-			0 = no quantization
-			0<x<1  interpolate between unquantized and fully quantized values
-
+list::
+		##	1 = fully quantized
+		##	0 = no quantization
+		##	0<x<1  interpolate between unquantized and fully quantized values
+::
 returns:: quantised cents
 
+
+METHOD:: freqToDegree
+rounds a frequency to the neast degree in the current key
+
+ARGUMENT:: freq
+in Hz
+Argument:: base
+The base frequency, or root frequency
+
+ARGUMENT:: round
+has three modes:
+list::
+		##	\nearest  round to the nearest scale degree
+		##	\up   always round to the degree above
+		##	\down always round to the degree below
+::
+ARGUMENT:: gravity
+determines how strong the attraction is:
+list::
+		##	1 = fully quantized
+		##	0 = no quantization
+		##	0<x<1  interpolate between unquantized and fully quantized values
+::
+returns:: the quantized degree.
+Note::
+The return value is the scale step, NOT the semitone.
+::
 
 EXAMPLES::
 
@@ -155,6 +190,11 @@ code::
 
 
 		k.quantizeCents(1150);
+
+// map to degree
+
+		k.freqToDegree(660, 440);
+
 
 
 // use in a Pbind

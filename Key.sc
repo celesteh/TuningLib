@@ -2,12 +2,12 @@
 
 Key {
 
-/*@
-shortDesc: Handles key changes
-longDesc: Keeps track of key changes and adjusts the tuning of the current scale accordingly.
+	/*@
+	shortDesc: Handles key changes
+	longDesc: Keeps track of key changes and adjusts the tuning of the current scale accordingly.
 
-Also can quantize a given semitone, cents value or frequency into the currently used scale
-@*/
+	Also can quantize a given semitone, cents value or frequency into the currently used scale
+	@*/
 
 	var < changes;
 	var < root;
@@ -114,6 +114,42 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 	}
 
 
+	freqToDegree { | freq, base = 440, round='nearest', gravity = 1|
+
+		var tempArray, func, g;
+
+		func = { |f|
+
+			var ratio, degree, result, semitone;
+
+			ratio = f / base;
+			ratio = Diamond.adjustOctave(ratio, scale.octaveRatio);
+
+			semitone = this.quantize(ratio.ratiomidi, round, 1);
+			result = scale.semitones.indexOf(semitone);
+
+
+			result = f + ((result - f)* g);
+			result;
+
+		};
+
+		g = gravity.min(1).max(0);
+
+		if (freq.isKindOf(SequenceableCollection),
+			{
+				freq.do({|i|
+					tempArray=tempArray.add(func.value(i));
+				});
+				^tempArray;
+			},
+			{
+				^func.value(freq);
+		});
+	}
+
+
+
 	quantizeFreq{ | freq, base = 440, round='off', gravity = 1|
 
 		/*@
@@ -121,13 +157,13 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 		freq: in Hz
 		base: The base frequency, or root frequency
 		round: has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
+		\off  do not round the answer
+		\up   round the answer to the nearest scale freq above
+		\down round the answer to the nearest scale freq below
 		gravity: determines how strong the attraction is:
-			1 = fully quantized
-			0 = no quantization
-			0<x<1  interpolate between unquantized and fully quantized values
+		1 = fully quantized
+		0 = no quantization
+		0<x<1  interpolate between unquantized and fully quantized values
 		ex:
 		a = Scale.choose;
 		k = Key(a);
@@ -146,13 +182,13 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 
 			{ratio < 1}. while ({
 
-				ratio = ratio * 2;
+				ratio = ratio * scale.octaveRatio;
 				octave = octave -1;
 			});
 
-			{ratio > 2}. while ({
+			{ratio > scale.octaveRatio}. while ({
 
-				ratio = ratio /2;
+				ratio = ratio /scale.octaveRatio;
 				octave = octave + 1;
 			});
 
@@ -181,41 +217,41 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 	}
 
 
-	quantizeCents { |cent, round = 'off', gravity = 1|
+	quantizeCents { |cent, round = 'nearest', gravity = 1|
 		/*@
 		desc: snaps a cents value to the nearest semitone in the current key
 		cents: the cents value to be quantized, or an array of cents
 		round: has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
+		\off  do not round the answer
+		\up   round the answer to the nearest scale freq above
+		\down round the answer to the nearest scale freq below
 		ex:
-			k.quantizeCents(1150);
+		k.quantizeCents(1150);
 		@*/
 
 		^(this.quantize(cent / 100, round, gravity) * 100);
 	}
 
 
-	quantize { |semitone, round = 'off', gravity = 1|
+	quantize { |semitone, round = 'nearest', gravity = 1|
 
 		/*@
 		desc: snaps a semitone to the nearest semitone in the current key
 		semitone: the tone to be quantized, or an array of semitones
 		round: has three modes:
-			\off  do not round the answer
-			\up   round the answer to the nearest scale freq above
-			\down round the answer to the nearest scale freq below
+		\off  do not round the answer
+		\up   round the answer to the nearest scale freq above
+		\down round the answer to the nearest scale freq below
 		ex:
-			k.quantize(11.5);
-			k.quantize([0.1, 3.5, 7.4]);
+		k.quantize(11.5);
+		k.quantize([0.1, 3.5, 7.4]);
 		@*/
 
 		var tempArray, func, g;
 
-		scale.semitones;
+		//scale.semitones;
 
-		if (['up','down','off'].includes(round), {
+		if (['up','down','off', 'nearest'].includes(round), {
 			func = {|given| var target, result, octave, ratio;
 
 				//given = given % scale.pitchesPerOctave;
@@ -230,7 +266,7 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 
 
 				case
-				{round=='off'} {
+				{(round=='off') || (round=='nearest')} {
 					target=given.nearestInList(scale.semitones)}
 				{round=='up'}  {
 					target=scale.semitones.at(scale.semitones.indexInBetween(given).ceil)}
@@ -256,9 +292,9 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 				},
 				{
 					^func.value(semitone);
-				});
+			});
 		},
-		{"the round argument must be one of: 'up', 'down', or 'off'.".error});
+		{"the round argument must be one of: 'up', 'down', or 'nearest'.".error});
 	}
 
 	mode_ { |mode|
@@ -266,15 +302,15 @@ Also can quantize a given semitone, cents value or frequency into the currently 
 		desc: changes the mode of the current key
 		mode: an array of degrees or a key from ScaleInfo. If nil, it revcerts to previous mode
 		ex:
-			k = Key(Scale.major);
-			k.scale.degrees;
-			k.scale.semitones;
-			k.mode_(\minor);
-			k.scale.degrees;
-			k.scale.semitones;
-			k.scale([0, 2, 4, 6, 8, 10, 11]);
-			k.scale.degrees;
-			k.scale.semitones;
+		k = Key(Scale.major);
+		k.scale.degrees;
+		k.scale.semitones;
+		k.mode_(\minor);
+		k.scale.degrees;
+		k.scale.semitones;
+		k.scale([0, 2, 4, 6, 8, 10, 11]);
+		k.scale.degrees;
+		k.scale.semitones;
 
 		@*/
 		var newScale, newRoot, record = true;
