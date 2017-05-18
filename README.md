@@ -1,7 +1,7 @@
 TuningLib
 =========
 
-the development version of the Supercollider Quark of the same name
+A SuperCollider Quark which helps with Tuning 
 
 
 
