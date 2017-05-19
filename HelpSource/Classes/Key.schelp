@@ -133,13 +133,6 @@ list::
 		##	\up   always round to the degree above
 		##	\down always round to the degree below
 ::
-ARGUMENT:: gravity
-determines how strong the attraction is:
-list::
-		##	1 = fully quantized
-		##	0 = no quantization
-		##	0<x<1  interpolate between unquantized and fully quantized values
-::
 returns:: the quantized degree.
 Note::
 The return value is the scale step, NOT the semitone.

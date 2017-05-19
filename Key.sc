@@ -114,9 +114,9 @@ Key {
 	}
 
 
-	freqToDegree { | freq, base = 440, round='nearest', gravity = 1|
+	freqToDegree { | freq, base = 440, round='nearest'|
 
-		var tempArray, func, g;
+		var tempArray, func, g, normalised_degrees;
 
 		func = { |f|
 
@@ -125,20 +125,32 @@ Key {
 			ratio = f / base;
 			ratio = Diamond.adjustOctave(ratio, scale.octaveRatio);
 
-			ratio.postln;
+			//ratio.postln;
+			//scale.ratios.postln;
 
 			semitone = this.quantize(ratio.ratiomidi, round, 1);
 
-			semitone.postln;
-			result = scale.semitones.indexOf(semitone % scale.pitchesPerOctave);
+			//semitone.postln;
 
+			// indexOf is not working for some reason
+			//result = normalised_degrees.indexOf(semitone % scale.pitchesPerOctave);
+			semitone = semitone % scale.pitchesPerOctave;
+			normalised_degrees.do({|deg, index|
+				(deg == semitone).if({
+					result = index;
+				})
+			});
+
+			//result.postln;
 
 			//result = f + ((result - f)* g);
 			result;
 
 		};
 
-		g = gravity.min(1).max(0);
+		//g = gravity.min(1).max(0);
+
+		normalised_degrees = scale.semitones % scale.pitchesPerOctave;
 
 		if (freq.isKindOf(SequenceableCollection),
 			{
@@ -251,7 +263,7 @@ Key {
 		k.quantize([0.1, 3.5, 7.4]);
 		@*/
 
-		var tempArray, func, g;
+		var tempArray, func, g, normalised_degrees;
 
 		//scale.semitones;
 
@@ -271,19 +283,25 @@ Key {
 
 				case
 				{(round=='off') || (round=='nearest')} {
-					target=given.nearestInList(scale.semitones)}
+					target=given.nearestInList(normalised_degrees)}
 				{round=='up'}  {
-					target=scale.semitones.at(scale.semitones.indexInBetween(given).ceil)}
+					target=scale.semitones.at(normalised_degrees.indexInBetween(given).ceil)}
 				{round=='down'} {
-					target=scale.semitones.at(scale.semitones.indexInBetween(given).floor)};
+					target=scale.semitones.at(normalised_degrees.indexInBetween(given).floor)};
 
 				//target;
 				(octave != 0).if ({
 					target = target + (scale.octaveRatio ** octave).ratiomidi;
 				});
 
+				//target.postln;
+				//given.postln;
+
 				result = given + ((target - given)* g);
 			};
+
+			normalised_degrees = scale.semitones % scale.pitchesPerOctave;
+			//normalised_degrees.postln;
 
 			g = gravity.min(1).max(0); // make sure gravity is within 0-1 range
 
