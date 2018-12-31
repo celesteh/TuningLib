@@ -10,17 +10,17 @@ Diamond
 	shortDesc: An N-limit tonality diamond
 	longDesc: An N-limit tonaility diamond, as used by Harry Partch.
 
-With a 9-limit diamond in base 2, one row looks like:
-1/1	5/4	3/2	7/4	9/8 for otonality or
-1/1	8/5	4/3	8/7	19/6	for utonality
+	With a 9-limit diamond in base 2, one row looks like:
+	1/1	5/4	3/2	7/4	9/8 for otonality or
+	1/1	8/5	4/3	8/7	19/6	for utonality
 
-It also is able to generate and navigate a 2 dimentinal table:
+	It also is able to generate and navigate a 2 dimentinal table:
 
-1/1  5/4  3/2  7/4  9/8
-8/5  1/1  6/5  7/5  9/5
-4/3  5/3  1/1  7/6  3/2
-8/7  10/7 12/7 1/1  9/7
-16/9 10/9 4/3  14/9 1/1
+	1/1  5/4  3/2  7/4  9/8
+	8/5  1/1  6/5  7/5  9/5
+	4/3  5/3  1/1  7/6  3/2
+	8/7  10/7 12/7 1/1  9/7
+	16/9 10/9 4/3  14/9 1/1
 	@*/
 
 
@@ -28,16 +28,16 @@ It also is able to generate and navigate a 2 dimentinal table:
 
 	*new { arg identities = nil, base = 2;
 
-	/*@
-	desc: Creates a new Diamond
-	identities: An array of numbers to use for numerators in otonality. Defaults to
-	[ 2, 5, 3, 7, 9, 11, 13, 15, 17, 19, 21, 23]
-	base: For octave based systems, this is 2, but if you wanted to base your system on 3s,
-	you could use that instead. Defaults to 2.
-	ex:
-	d = Diamond.new([2, 5, 3, 7, 9]);
-	// generates 1/1	5/4	3/2	7/4	9/8 for otonality as described above
-	@*/
+		/*@
+		desc: Creates a new Diamond
+		identities: An array of numbers to use for numerators in otonality. Defaults to
+		[ 2, 5, 3, 7, 9, 11, 13, 15, 17, 19, 21, 23]
+		base: For octave based systems, this is 2, but if you wanted to base your system on 3s,
+		you could use that instead. Defaults to 2.
+		ex:
+		d = Diamond.new([2, 5, 3, 7, 9]);
+		// generates 1/1	5/4	3/2	7/4	9/8 for otonality as described above
+		@*/
 		if (identities.notNil, {
 			if (identities.isKindOf(SimpleNumber), {
 				^Diamond.limit(identities, base);
@@ -117,25 +117,25 @@ It also is able to generate and navigate a 2 dimentinal table:
 		// utonality is the (base / overtone) * base ^^x
 		otonality = overtones.collect({ arg num;
 
-			// the numerator represents the base * base^^x in utonality
-			// the denominator represents the base * base^^x in otonality
-			numerator = base;
-			denominator =base;
+		// the numerator represents the base * base^^x in utonality
+		// the denominator represents the base * base^^x in otonality
+		numerator = base;
+		denominator =base;
 
 
-			// we want the fractions to be between 1 & 2
-			// so, except for n/n, the numerator in utonality will
-			// always be twice as large as the denominator in otonality.
-			// we multiply each by the base until the numerator variable
-			// is larger than the overtone.
+		// we want the fractions to be between 1 & 2
+		// so, except for n/n, the numerator in utonality will
+		// always be twice as large as the denominator in otonality.
+		// we multiply each by the base until the numerator variable
+		// is larger than the overtone.
 
-			{numerator <= num}.while {
-				denominator = numerator;
-				numerator = numerator * base;
-			};
+		{numerator <= num}.while {
+		denominator = numerator;
+		numerator = numerator * base;
+		};
 
-			utonality = utonality.add(numerator);
-			denominator;
+		utonality = utonality.add(numerator);
+		denominator;
 		});
 		*/
 
@@ -143,13 +143,13 @@ It also is able to generate and navigate a 2 dimentinal table:
 	}
 
 	*adjustOctave { arg ratio, base =2;
-	/*@
-	desc: For a given ratio, does octave transpositions and returns a ratio between 1 and 2
+		/*@
+		desc: For a given ratio, does octave transpositions and returns a ratio between 1 and 2
 		ratio: the ratio to adjust
 		base: the octave multiplier. Usually this should be left as 2, for for some tuning systems, like Bohlen-Pierce, it might be another number.
-	ex:
-	Diamond.adjustOctave(9/2) // returns 1.125, which is 9/8
-	@*/
+		ex:
+		Diamond.adjustOctave(9/2) // returns 1.125, which is 9/8
+		@*/
 
 		//ratio = ratio / (ratio.previousPowerOf(base))
 
@@ -177,13 +177,13 @@ It also is able to generate and navigate a 2 dimentinal table:
 		^this.d1Intervals(start, orientation, niad);
 	}
 	makeTriad {|identitity, orientation|
-       //DeprecatedError(this, \makeTriad, \d1Triad, Diamond).throw;
+		//DeprecatedError(this, \makeTriad, \d1Triad, Diamond).throw;
 		this.deprecated(thisMethod, Diamond.findMethod(\d1Triad));
 		^this.d1Triad(identitity, orientation);
 	}
 
 	makeNiad {|identity,orientation, n=3|
-       //DeprecatedError(this, \makeNiad, \d1Niad, Diamond).throw;
+		//DeprecatedError(this, \makeNiad, \d1Niad, Diamond).throw;
 		this.deprecated(thisMethod, Diamond.findMethod(\d1Niad));
 		^this.d1Niad(identity,orientation, n);
 	}
@@ -198,17 +198,17 @@ It also is able to generate and navigate a 2 dimentinal table:
 	// real methods
 
 	d1Intervals { arg start, orientation, niad=3;
-	/*@
-	desc: For a given index, return a n-iad of ratios
-	start: The index in the lattice row in which to start. This wraps if need be.
-	orientation: Use true for utonality or false for otonailty.
+		/*@
+		desc: For a given index, return a n-iad of ratios
+		start: The index in the lattice row in which to start. This wraps if need be.
+		orientation: Use true for utonality or false for otonailty.
 		niad: The number of contigious ratios to return in the chord. This defaults to 3 for a triad
-	The n-iad is computed in regards to the base.
-	ex:
-	d = Diamond.new([2, 5, 3, 7, 9]);
-	d.make1dIntervals(4, true); // returns [9/8, 2/2, 5/4]
-	d.make1dIntervals( 2, false); // returns [4/3, 8/7, 16/9]
-	@*/
+		The n-iad is computed in regards to the base.
+		ex:
+		d = Diamond.new([2, 5, 3, 7, 9]);
+		d.make1dIntervals(4, true); // returns [9/8, 2/2, 5/4]
+		d.make1dIntervals( 2, false); // returns [4/3, 8/7, 16/9]
+		@*/
 
 		// this method returns a triad of three notes above the start
 		// if the start is too close to the end of the array, we wrap
@@ -221,16 +221,16 @@ It also is able to generate and navigate a 2 dimentinal table:
 		/*
 		if (orientation, {
 
-			// if were smarter the utonality and otonality arrays would
-			// contain the RESULTS of these computations
+		// if were smarter the utonality and otonality arrays would
+		// contain the RESULTS of these computations
 
-			result = [0, 1, 2].collect({ arg offset;
-				overtones.at((start + offset) % overtones.size) /
-					otonality.at((start + offset) % otonality.size) });
+		result = [0, 1, 2].collect({ arg offset;
+		overtones.at((start + offset) % overtones.size) /
+		otonality.at((start + offset) % otonality.size) });
 		} , {
-			result = [0, 1, 2].collect({ arg offset;
-				utonality.at((start + offset) % utonality.size) /
-					overtones.at((start + offset) % overtones.size) });
+		result = [0, 1, 2].collect({ arg offset;
+		utonality.at((start + offset) % utonality.size) /
+		overtones.at((start + offset) % overtones.size) });
 		});
 		*/
 
@@ -288,18 +288,18 @@ It also is able to generate and navigate a 2 dimentinal table:
 	}
 
 	makeIntervals { arg x, y, orientation, niad=3;
-	/*@
-	desc: For a given x and y index, return a n-iad of ratios
-	x: The index in the diamond row for o[x]/o[y] This wraps if need be.
-	y: The index in the diamond column for o[x]/o[y] This wraps if need be.
-	orientation: Use true for utonality such that the returned triads will change in the numerator, but not the demonimator.  To change the denominator, use false.
+		/*@
+		desc: For a given x and y index, return a n-iad of ratios
+		x: The index in the diamond row for o[x]/o[y] This wraps if need be.
+		y: The index in the diamond column for o[x]/o[y] This wraps if need be.
+		orientation: Use true for utonality such that the returned triads will change in the numerator, but not the demonimator.  To change the denominator, use false.
 		niad: The number of contigious ratios to return in the chord. This defaults to 3 for a triad
 
-	ex:
-	d = Diamond.new([2, 5, 3, 7, 9]);
-	d.makeIntervals(4, 3, true); // returns [9/7, 8/7, 10/7]
-	d.makeIntervals(2, 2, false); // returns [1/1, 12/7, 4/3]
-	@*/
+		ex:
+		d = Diamond.new([2, 5, 3, 7, 9]);
+		d.makeIntervals(4, 3, true); // returns [9/7, 8/7, 10/7]
+		d.makeIntervals(2, 2, false); // returns [1/1, 12/7, 4/3]
+		@*/
 
 		var result, ratio, arr;
 
@@ -310,8 +310,8 @@ It also is able to generate and navigate a 2 dimentinal table:
 			result = arr.collect({ arg offset;
 				Diamond.adjustOctave(identities.wrapAt(x + offset) /
 					identities.wrapAt(y)) });
-				//overtones.at((x + offset) % overtones.size) /
-				//	overtones.at(y % overtones.size);
+			//overtones.at((x + offset) % overtones.size) /
+			//	overtones.at(y % overtones.size);
 			//});
 
 		} , {
@@ -319,8 +319,8 @@ It also is able to generate and navigate a 2 dimentinal table:
 				Diamond.adjustOctave(identities.wrapAt(x) /
 					identities.wrapAt(y + offset)) });
 
-				//overtones.wrapAt(x) /
-				//	overtones.wrapAt(y + offset);
+			//overtones.wrapAt(x) /
+			//	overtones.wrapAt(y + offset);
 			//});
 		});
 
@@ -374,11 +374,11 @@ It also is able to generate and navigate a 2 dimentinal table:
 
 	getInterval { arg x, y;
 
-	/*@
-	desc: For a given x and y index, return a ratio
-	x: The index in the diamond row for o[x]/o[y] This wraps if need be.
-	y: The index in the diamond column for o[x]/o[y] This wraps if need be.
-	@*/
+		/*@
+		desc: For a given x and y index, return a ratio
+		x: The index in the diamond row for o[x]/o[y] This wraps if need be.
+		y: The index in the diamond column for o[x]/o[y] This wraps if need be.
+		@*/
 		var result;
 
 
@@ -390,12 +390,12 @@ It also is able to generate and navigate a 2 dimentinal table:
 
 	d1Pivot { arg start, niad=3;
 
-	/*@
-	desc: Find a pivot based on a start point. Finding the new pivot point means picking one of the fractions in a n-iad. Finding the new start means figuring out wether the new pivot is the top, middle, or bottom
-	member of the n-iad and computing a new start index based on that computation
-	start: The starting index of the n-iad, in which we wish to pivot
+		/*@
+		desc: Find a pivot based on a start point. Finding the new pivot point means picking one of the fractions in a n-iad. Finding the new start means figuring out wether the new pivot is the top, middle, or bottom
+		member of the n-iad and computing a new start index based on that computation
+		start: The starting index of the n-iad, in which we wish to pivot
 		niad: The number of contigious ratios to return in the chord. This defaults to 3 for a triad
-	@*/
+		@*/
 
 		var pivot, new_start;
 
@@ -407,17 +407,17 @@ It also is able to generate and navigate a 2 dimentinal table:
 
 	d2Pivot { arg x, y, orientation, niad=3;
 
-	/*@
-	desc: Find a pivot based on a start point, describe by o[x]/o[y].
-	Finding the new pivot point means picking one of the fractions in a n-iad
-	Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
-	member of the triad and computing a new start index based on that computation
-	x: The starting index of the numerator of the n-iad in which we wish to pivot
-	y: The starting index of the denominator of the n-iad in which we wish to pivot
-	orientation: If true, the overtones will change in the pivot. If false, the
-	undertones will change in the pivot.
+		/*@
+		desc: Find a pivot based on a start point, describe by o[x]/o[y].
+		Finding the new pivot point means picking one of the fractions in a n-iad
+		Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
+		member of the triad and computing a new start index based on that computation
+		x: The starting index of the numerator of the n-iad in which we wish to pivot
+		y: The starting index of the denominator of the n-iad in which we wish to pivot
+		orientation: If true, the overtones will change in the pivot. If false, the
+		undertones will change in the pivot.
 		niad: The number of contigious ratios to return in the chord. This defaults to 3 for a triad.
-	@*/
+		@*/
 		var pivotx, pivoty, startx, starty;
 
 		//DeprecatedError(this, "d2Pivot", "pivotxy", Diamond).throw;
@@ -444,55 +444,74 @@ It also is able to generate and navigate a 2 dimentinal table:
 
 	d2WalkXY { arg x, y, orientation, niad=3;
 
-	/*@
-	desc: Start walking based on a start point, describe by o[x]/o[y].
-	Finding the new pivot point means picking one of the fractions in a n-iad
-	Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
-	member of the triad and computing a new start index based on that computation
-	x: The starting index of the numerator of the n-iad which we will launch from
-	y: The starting index of the denominator of the n-iad in which we will launch from
-	orientation: If true, the overtones will change in the pivot for the first step. If false, the
-	undertones will change in the pivot for the first step. This will alternate for every step.
+		/*@
+		desc: Start walking based on a start point, describe by o[x]/o[y].
+		Finding the new pivot point means picking one of the fractions in a n-iad
+		Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
+		member of the triad and computing a new start index based on that computation
+		x: The starting index of the numerator of the n-iad which we will launch from
+		y: The starting index of the denominator of the n-iad in which we will launch from
+		orientation: If true, the overtones will change in the pivot for the first step. If false, the
+		undertones will change in the pivot for the first step. This will alternate for every step.
 		niad: The number of contigious ratios to return in the chord
 		@*/
 
-		var startX, startY;
+		var startX, startY, n;
 
 		startX = x;
 		startY = y;
+		n = niad;
 
 
-		^Routine({
-			var x, y, orient, arr;
+		^Routine({|inval|
+			var x, y, orient, arr, niad, previad;
 
 			x = startX;
 			y = startY;
 			orient = orientation;
 
+			inval.isKindOf(Event).if({
+				inval = inval[\niad];
+				//"evt %".format(inval).postln;
+			});
+
+			niad = inval ? n;
+			previad = niad;
+
 			{true}.while({
-				arr = this.d2Pivot (x, y, orient);
+
+				inval.isKindOf(Event).if({
+					inval = inval[\niad];
+					//"evt %".format(inval).postln;
+				});
+				niad = inval ? niad;
+
+				//"niad %".format(niad).postln;
+
+				arr = this.d2Pivot (x, y, orient, previad);
+				previad = niad;
 
 				x = arr[0];
 				y = arr[1];
 				//"% / %\n".postf(overtones[x], overtones[y]);
 				//this.makeIntervals(x, y, orient, niad).postln;
-				this.makeIntervals(x, y, orient, niad).yield;
+				inval = this.makeIntervals(x, y, orient, niad).yield;
 
 				orient = orient.not;
 			})
 		})
 	}
 
-	walk { arg numerator, denominator, orientation, niad=3;
-	/*@
-	desc: Start walking based on a start point, describe by numerator and denominator.
-	Finding the new pivot point means picking one of the fractions in a triad
-	Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
-	member of the triad and computing a new start index based on that computation
-	numerator: The starting numerator of the triad in which we wish to pivot
-	denominator: The starting denominator of the triad in which we wish to pivot
-	orientation: If true, the overtones will change in the pivot. If false, the
-	undertones will change in the pivot for the first step.
+	walk { arg numerator=0, denominator=0, orientation=true, niad=3;
+		/*@
+		desc: Start walking based on a start point, describe by numerator and denominator.
+		Finding the new pivot point means picking one of the fractions in a triad
+		Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
+		member of the triad and computing a new start index based on that computation
+		numerator: The starting numerator of the triad in which we wish to pivot
+		denominator: The starting denominator of the triad in which we wish to pivot
+		orientation: If true, the overtones will change in the pivot. If false, the
+		undertones will change in the pivot for the first step.
 		niad: The number of contigious ratios to return in the chord
 		@*/
 
@@ -500,17 +519,17 @@ It also is able to generate and navigate a 2 dimentinal table:
 	}
 
 	pivot { arg numerator, denominator, orientation, niad=3;
-	/*@
-	desc: Find a pivot based on a ratio, given as the numerator and denominator.
-	Finding the new pivot point means picking one of the fractions in a triad
-	Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
-	member of the triad and computing a new start index based on that computation
-	numerator: The starting numerator of the triad in which we wish to pivot
-	denominator: The starting denominator of the triad in which we wish to pivot
-	orientation: If true, the overtones will change in the pivot. If false, the
-	undertones will change in the pivot.
+		/*@
+		desc: Find a pivot based on a ratio, given as the numerator and denominator.
+		Finding the new pivot point means picking one of the fractions in a triad
+		Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
+		member of the triad and computing a new start index based on that computation
+		numerator: The starting numerator of the triad in which we wish to pivot
+		denominator: The starting denominator of the triad in which we wish to pivot
+		orientation: If true, the overtones will change in the pivot. If false, the
+		undertones will change in the pivot.
 		niad: The number of contigious ratios to return in the chord
-	@*/
+		@*/
 
 		var x, y, arr;
 		x = this.pr_indexOf(numerator);
@@ -522,17 +541,17 @@ It also is able to generate and navigate a 2 dimentinal table:
 	}
 
 	pivotxy { arg x,y, orientation, niad=3;
-	/*@
-	desc: Find a pivot based on a start point, describe by o[x]/o[y].
-	Finding the new pivot point means picking one of the fractions in a triad
-	Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
-	member of the triad and computing a new start index based on that computation
-	x: The starting index of the numerator of the triad in which we wish to pivot
-	y: The starting index of the denominator of the triad in which we wish to pivot
-	orientation: If true, the overtones will change in the pivot. If false, the
-	undertones will change in the pivot.
+		/*@
+		desc: Find a pivot based on a start point, describe by o[x]/o[y].
+		Finding the new pivot point means picking one of the fractions in a triad
+		Finding the new start means figuring out whether the new pivot is the top, middle, or bottom
+		member of the triad and computing a new start index based on that computation
+		x: The starting index of the numerator of the triad in which we wish to pivot
+		y: The starting index of the denominator of the triad in which we wish to pivot
+		orientation: If true, the overtones will change in the pivot. If false, the
+		undertones will change in the pivot.
 		niad: The number of contigious ratios to return in the chord
-	@*/
+		@*/
 
 		var arr;
 		arr = this.d2Pivot(x, y, orientation);
@@ -598,10 +617,11 @@ It also is able to generate and navigate a 2 dimentinal table:
 			str = str ++ "\n";
 		});
 
-		str.postln;
+		^str
 	}
 
 	post { this.postln }
+
 
 }
 

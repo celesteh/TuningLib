@@ -114,6 +114,18 @@ The number of contigious ratios to return in the chord. This defaults to 3 for a
 
 returns:: An link::Classes/Routine:: which yields a stream of arrays of ratios
 
+discussion::
+The link::Classes/Routine:: takes an inval that is either an integer which indicates the number of ratios to return (ie 3 for a triad)
+or an link::Classes/Event::. If it is an Event, it looks for an item index by \niad and uses that to determine the number of ratios to return.
+In the case that the number of ratios is not specified with an inval, it will use the last number specified.
+code::
+(
+w = Diamond.new.walk;
+5.do({
+	w.next(3.rrand(6)).postln;
+})
+)
+::
 
 
 
@@ -279,6 +291,7 @@ returns:: An link::Classes/Routine:: which yields a stream of arrays of ratios
 
 
 
+
 METHOD:: postln
 Prints out the tonality diamond
 
@@ -294,29 +307,64 @@ EXAMPLES::
 
 Using a Diamond with a Pbind:
 code::
-s.boot;
 
-
-(
-SynthDef(\sin, {|out=0, freq=440, dur=1, amp=02, pan=0|
-	var sin, env, panner;
-	sin = SinOsc.ar(freq, 0, amp);
-	env = EnvGen.kr(Env.sine(dur), doneAction:2);
-	panner = Pan2.ar(sin, pan, env);
-	Out.ar(out, panner);
-}).add;
-)
+// Play Traids
 (
 var diamond, walk;
-diamond = Diamond.limit(11);
-walk = diamond.walk(3, 2, true); // This will give us a stream of ratios
 
-Pbind(
-	\instrument, \sin,
-	\pan, [-1, 0, 1],
-	\freq, walk * 440, // multiply the ratios by a frequency
-	\dur, 2
-).play
+s.waitForBoot ({
+	SynthDef(\sin, {|out=0, freq=440, dur=1, amp=02, pan=0|
+		var sin, env, panner;
+		sin = SinOsc.ar(freq, 0, amp);
+		env = EnvGen.kr(Env.sine(dur), doneAction:2);
+		panner = Pan2.ar(sin, pan, env);
+		Out.ar(out, panner);
+	}).add;
+
+	s.sync;
+
+	diamond = Diamond.limit(11);
+	walk = diamond.walk(3, 2, true); // This will give us a stream of ratios
+
+	Pbind(
+		\instrument, \sin,
+		\pan, [-1, 0, 1],
+		\freq, walk * 440,
+		\dur, 2
+	).play
+})
 
 )
+
+
+// Vary the number of ratios in the niads
+(
+var diamond, walk;
+
+s.waitForBoot ({
+	SynthDef(\sin, {|out=0, freq=440, dur=1, amp=02, pan=0|
+		var sin, env, panner;
+		sin = SinOsc.ar(freq, 0, amp);
+		env = EnvGen.kr(Env.sine(dur), doneAction:2);
+		panner = Pan2.ar(sin, pan, env);
+		Out.ar(out, panner);
+	}).add;
+
+	s.sync;
+
+	diamond = Diamond.limit(11);
+	walk = diamond.walk(3, 2, true); // This will give us a stream of ratios
+
+	Pbind(
+		\instrument, \sin,
+		\base, 440,
+		\niad, Pwhite(2, 5), // between 2-5 notes per chord
+		\freq, walk * Pkey(\base),
+		\dur, 2
+	).play
+})
+
+)
+
+
 ::
