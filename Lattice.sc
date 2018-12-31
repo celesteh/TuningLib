@@ -12,21 +12,11 @@ Lattice {
 	ex:
 	Diamond.adjustOctave(9/2) // returns 1.125, which is 9/8
 	@*/
-		/*
-		{ratio < 1}.while ({
-			ratio = ratio * 2;
-		});
-		{ratio > 2}.while ( {
-			ratio = ratio / 2;
-			//ratio.postln;
-		});
 
-		//ratio.postln;
-		*/
 
-		ratio = ratio / (ratio.previousPowerOf(base))
+		//ratio = ratio / (ratio.previousPowerOf(base))
 
-		^ratio;
+		^ratio.adjustOctave;
 	}
 
 }
