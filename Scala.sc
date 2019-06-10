@@ -49,6 +49,11 @@ Scala : Tuning {
 	*forceUpdate{|dir,lastModifiedFile|
 		var file, data;
 		data=dir?defaultDir;
+
+		File.exists(data).not.if({
+			File.mkdir(data)
+		});
+
 		lastModifiedFile =  lastModifiedFile ? (data +/+ "Last-Modified.txt");
 		//"forceUpdate".postln;
 		"curl http://huygens-fokker.org/docs/scales.zip > % && cd % && unzip -aa -u scales.zip".format(data+/+"scales.zip", data).unixCmd({
@@ -66,6 +71,11 @@ Scala : Tuning {
 
 		tmp = Platform.defaultTempDir;
 		data=dir?defaultDir;
+
+		File.exists(data).not.if({
+			File.mkdir(data)
+		});
+
 		shouldUpdate = true;
 
 		doUpdate = {
