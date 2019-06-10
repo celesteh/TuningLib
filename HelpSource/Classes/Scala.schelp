@@ -28,6 +28,12 @@ ARGUMENT:: path
 path to the Scala file.
 
 
+METHOD:: update
+Checks if the local copy of the scale library is the latest and downsloads a new copy if not
+ARGUMENT:: dir
+Optionally specify a different directory
+DISCUSSION:
+Requires curl and unzip, both of which come with Mac and Linux.
 
 INSTANCEMETHODS::
 

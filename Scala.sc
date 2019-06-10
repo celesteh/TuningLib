@@ -1,5 +1,6 @@
 // By Jascha Narveson and Charles Celeste Hutchins
 
+
 Scala : Tuning {
 	/*@
 	shortDesc: open Scala files
@@ -10,8 +11,13 @@ Scala : Tuning {
 	@*/
 	//
 
+	classvar <>defaultDir;
 	var <pitchesPerOctave;
 
+
+	*initClass {
+		defaultDir = PathName( Scala.filenameSymbol.asString ).pathOnly +/+ "data/";
+	}
 
 	*new { arg path;
 		/*@
@@ -33,16 +39,144 @@ Scala : Tuning {
 		^super.new.initOpen(pathname: path);
 	}
 
+	*at { arg name;
+		try {
+			^super.new.initOpen(name);
+		} {|e| ^Tuning.at(name) }
+	}
+
+
+	*forceUpdate{|dir,lastModifiedFile|
+		var file, data;
+		data=dir?defaultDir;
+		lastModifiedFile =  lastModifiedFile ? (data +/+ "Last-Modified.txt");
+		//"forceUpdate".postln;
+		"curl http://huygens-fokker.org/docs/scales.zip > % && cd % && unzip -aa -u scales.zip".format(data+/+"scales.zip", data).unixCmd({
+			file = File.new(lastModifiedFile, "w");
+			file.write(Date.getDate.rawSeconds);
+			file.close;
+		});
+	}
+
+
+	*update {|dir|
+
+		var tmp, data, lastModifiedFile, lastModified, propFile, properties, propArr,
+		dateStr, dateArr, month, time, archiveModified, shouldUpdate, doUpdate;
+
+		tmp = Platform.defaultTempDir;
+		data=dir?defaultDir;
+		shouldUpdate = true;
+
+		doUpdate = {
+			Scala.forceUpdate(data, lastModifiedFile);
+			//	var file;
+			//	"doUpdate".postln;
+			//	"curl http://huygens-fokker.org/docs/scales.zip > % && cd % && unzip -aa scales.zip".format(data+/+"scales.zip", data).unixCmd({
+			//		file = File.new(lastModifiedFile, "w");
+			//		file.write(Date.getDate.rawSeconds);
+			//		file.close;
+			//	});
+		};
+
+
+		// check if we should update
+
+		lastModifiedFile = data +/+ "Last-Modified.txt";
+		File.exists(lastModifiedFile).if({
+			lastModified = File.mtime(lastModifiedFile);
+			propFile = tmp +/+ "scala.txt";
+
+			// get just the header
+			("curl -I http://huygens-fokker.org/docs/scales.zip -D" + propFile).unixCmd({
+
+
+
+				properties = IdentityDictionary.new;
+
+				File.exists(propFile).if ({
+					propArr = FileReader.read(propFile, true, true, delimiter: $:);
+					propArr.do({|pair|
+						properties.put(pair[0].stripWhiteSpace.asSymbol, pair[1..]);
+					});
+
+					// now we've read the propFile, delete it
+					File.delete(propFile);
+
+
+					// check the date in the header
+					dateArr = properties.at("Last-Modified".asSymbol);
+					dateArr = dateArr.collect({|i| i.stripWhiteSpace});
+					dateArr = dateArr.collect({|i| i.split($ )}).flatten;
+
+					month = case
+					{ dateArr[2].compare("Jan", true)==0 }   { 1 } // Jan is 1
+					{ dateArr[2].compare("Feb", true)==0 }   { 2 } // Jan is 1
+					{ dateArr[2].compare("Mar", true)==0 }   { 3 } // Jan is 1
+					{ dateArr[2].compare("Apr", true)==0 }   { 4 } // Jan is 1
+					{ dateArr[2].compare("May", true)==0 }   { 5 } // Jan is 1
+					{ dateArr[2].compare("Jun", true)==0 }   { 6 } // Jan is 1
+					{ dateArr[2].compare("Jul", true)==0 }   { 7 } // Jan is 1
+					{ dateArr[2].compare("Aug", true)==0 }   { 8 } // Jan is 1
+					{ dateArr[2].compare("Sep", true)==0 }   { 9 } // Jan is 1
+					{ dateArr[2].compare("Oct", true)==0 }   { 10 } // Jan is 1
+					{ dateArr[2].compare("Nov", true)==0 }   { 11 } // Jan is 1
+					{ dateArr[2].compare("Dec", true)==0 }   { 12 };
+
+					//time = dateArr[4].split($:
+
+					//Thu, 07 Mar 2019 13:28:36 GMT
+					//year, month, day, hour, minute, second, dayOfWeek, rawSeconds;
+
+					archiveModified = Date(dateArr[3], month, dateArr[1], dateArr[4], dateArr[5], dateArr[6], 0, 0);
+					shouldUpdate = (archiveModified.rawSeconds > lastModified);
+
+					shouldUpdate.if({
+						File.delete(lastModifiedFile);
+						doUpdate.();
+					}, {
+						"Up to date.".postln;
+
+					});
+
+				})
+			});
+
+		}, { doUpdate.();})
+	}
+
 
 
 	initOpen{ arg pathname;
 
-		var file,lines,line, ratios, num, numerator, denominator, clean_line, line_finished;
+		var path, file,lines,line, ratios, num, numerator, denominator, clean_line, line_finished;
 
 		tuning = [];
 		ratios = [];
+		//path = pathname;
+
+		// First try to find the file
+		File.exists(pathname).not.if({
+			pathname.endsWith("scl").not.if({
+				pathname = pathname++".scl";
+			});
+		});
+		File.exists(pathname).not.if({
+			pathname = defaultDir  +/+ pathname;
+		});
+
+		File.exists(pathname).not.if({
+			pathname = defaultDir +/+ "scl" +/+ pathname;
+		});
+
+
+		File.exists(pathname).not.if({
+			MethodError("File % not found.".format(path)).throw;
+		});
+
 
 		// read the file
+
 		// ok to read all the data into memory because it's small
 		file = File.open(pathname,"r"); // open the .scl file
 		lines = [];	// start an array for the relevant lines of the file
@@ -135,6 +269,10 @@ Scala : Tuning {
 		}, {
 			octaveRatio=2
 		});
+
+
+		path = PathName.new(pathname);
+		all.put(path.fileNameWithoutExtension.asSymbol, this);
 	}
 
 
