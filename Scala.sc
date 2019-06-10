@@ -163,7 +163,7 @@ Scala : Tuning {
 
 		tuning = [];
 		ratios = [];
-		//path = pathname;
+		path = pathname;
 
 		// First try to find the file
 		File.exists(pathname).not.if({
@@ -176,8 +176,17 @@ Scala : Tuning {
 		});
 
 		File.exists(pathname).not.if({
-			pathname = defaultDir +/+ "scl" +/+ pathname;
+			pathname = defaultDir +/+ "scl" +/+ path;
 		});
+
+		File.exists(pathname).not.if({
+			pathname.endsWith("scl").not.if({
+				pathname = pathname++".scl";
+			});
+		});
+
+
+		pathname.postln;
 
 
 		File.exists(pathname).not.if({
