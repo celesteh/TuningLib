@@ -89,6 +89,40 @@ Diamond
 
 	}
 
+	*size {arg size=5, base=2; // this is dodgy, but sometimes you just want a diamond of some size
+		var arr, int, min;
+
+		// figure out the minimum limit based on the base
+		min = base + 3;
+		// min must be odd, so if it comes out to an even number, add 1
+		((min % 2) == 0).if ({
+			min = min + 1
+		});
+
+		// the diamond starts [2, 5, 3] for base 2. Keep that order, but generalise for other bases
+		arr = [];
+
+		[2, 5, 3].do({|i|
+			(i >= base).if ({
+				arr = arr.add(i);
+			});
+		});
+
+		int = 7;
+		{size > arr.size}.while({
+			(int >= base).if ({
+				if ((int % base) != 0, {
+					arr = arr.add(int);
+				});
+			});
+			int = int +2;
+		});
+
+		^super.new.init(arr, base);
+	}
+
+
+
 
 
 	init { arg ids = nil, bas = 2;
