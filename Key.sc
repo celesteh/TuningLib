@@ -118,6 +118,8 @@ Key {
 
 		var tempArray, func, g, normalised_degrees;
 
+		normalised_degrees = scale.semitones % scale.pitchesPerOctave;
+
 		func = { |f|
 
 			var ratio, degree, result, semitone;
@@ -150,13 +152,13 @@ Key {
 
 		//g = gravity.min(1).max(0);
 
-		normalised_degrees = scale.semitones % scale.pitchesPerOctave;
 
 		if (freq.isKindOf(SequenceableCollection),
 			{
-				freq.do({|i|
-					tempArray=tempArray.add(func.value(i));
-				});
+				//freq.do({|i|
+				//	tempArray=tempArray.add(func.value(i));
+				//});
+				tempArray = freq.collect({|i| func.value(i) });
 				^tempArray;
 			},
 			{
@@ -263,16 +265,28 @@ Key {
 		k.quantize([0.1, 3.5, 7.4]);
 		@*/
 
-		var tempArray, func, g, normalised_degrees;
+		var tempArray, func, g, normalised_degrees, sorted;
 
-		//scale.semitones;
+
+		//normalised_degrees = scale.semitones % scale.pitchesPerOctave;
+		//sorted = normalised_degrees.sort;
+		normalised_degrees = Dictionary.new(n: scale.semitones.size);
+		(scale.semitones % scale.pitchesPerOctave).do({|nrml, index|
+			normalised_degrees.put(nrml, index);
+		});
+		sorted = normalised_degrees.keys.as(Array).sort;
+
+
+		g = gravity.min(1).max(0); // make sure gravity is within 0-1 range
 
 		if (['up','down','off', 'nearest'].includes(round), {
-			func = {|given| var target, result, octave, ratio;
+			func = {|given|
+				var target, result, octave, ratio;
 
 				//given = given % scale.pitchesPerOctave;
 				octave = 0;
 
+				// get into the bottom octave
 				{given >= scale.octaveRatio.ratiomidi}.while({
 
 					ratio = given.midiratio / scale.octaveRatio;
@@ -283,25 +297,20 @@ Key {
 
 				case
 				{(round=='off') || (round=='nearest')} {
-					target=given.nearestInList(normalised_degrees)}
-				{round=='up'}  {
-					target=scale.semitones.at(normalised_degrees.indexInBetween(given).ceil)}
+					target=normalised_degrees.at(given.nearestInList(sorted))}// this one works
+				{round=='up'}  {//these two probably don't
+					target=normalised_degrees.at(sorted.indexInBetween(given).ceil)}
 				{round=='down'} {
-					target=scale.semitones.at(normalised_degrees.indexInBetween(given).floor)};
+					target=normalised_degrees.at(sorted.indexInBetween(given).floor)};
 
-				//target;
 				(octave != 0).if ({
 					target = target + (scale.octaveRatio ** octave).ratiomidi;
 				});
 
-				//target.postln;
-				//given.postln;
 
 				result = given + ((target - given)* g);
 			};
 
-			normalised_degrees = scale.semitones % scale.pitchesPerOctave;
-			//normalised_degrees.postln;
 
 			g = gravity.min(1).max(0); // make sure gravity is within 0-1 range
 

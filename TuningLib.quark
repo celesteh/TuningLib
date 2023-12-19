@@ -4,7 +4,7 @@
 	author: 		"Charles Celeste Hutchins, Jascha Narveson",
 
 	version:		0.16, // must be a float
-	organization: 	"University of Birmingham",
+	organization: 	"University of Kent",
 	country: 		"UK",
 	since: 		"2009",
 	helpdoc: "Help/TuningLib.html",
@@ -12,5 +12,5 @@
     schelp: "TuningLib",
     dependencies: ["MathLib"],
     license: "GPL",
-    copyright: "Jascha Narveson and Charles Hutchins 2009-2018"
+    copyright: "Jascha Narveson and Charles Hutchins 2009-2022"
 )

@@ -620,6 +620,9 @@ Diamond
 		^identities.indexOf(digit);
 	}
 
+
+	// This is bad. This needs to be an asString
+
 	postln {
 		var ratio, str, n, d;
 
