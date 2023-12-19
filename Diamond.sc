@@ -621,9 +621,13 @@ Diamond
 	}
 
 
-	// This is bad. This needs to be an asString
 
-	postln {
+	postln { this.asString.postln }
+
+
+	post { this.asString.post }
+
+	asString {
 		var ratio, str, n, d;
 
 		str = "";
@@ -656,9 +660,6 @@ Diamond
 
 		^str
 	}
-
-	post { this.postln }
-
 
 }
 
