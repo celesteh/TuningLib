@@ -43,12 +43,17 @@ discussion::
 	ex:
 code::
 (
-	SynthDef("fm", {arg out, amp, carrier, modulator, depth;
+	SynthDef("fm", {arg out, amp, carrier, modulator, depth, dur, midinote = 0;
+		var sin, ratio, env;
 
-		var sin;
+		ratio = midinote.midiratio;
+		carrier = carrier * ratio;
+		modulator = modulator * ratio;
+		depth = depth * ratio;
 
 		sin = SinOsc.ar(SinOsc.ar(modulator, 0, depth, carrier));
-		Out.ar(out, sin * amp);
+		env = EnvGen.kr(Env.perc(releaseTime: dur)) * amp;
+		Out.ar(out, (sin * env).dup);
 	}).add;
 )
 (
@@ -61,6 +66,16 @@ code::
 	curve = DissonanceCurve.fm(carrier, modulator, depth, 1202);
 	scale = curve.scale;
 
+    Pbind(
+
+		\instrument, \fm,
+		\octave, 0,
+	    \carrier, carrier,
+		\modulator, modulator,
+		\depth, depth,
+		\scale, scale,
+	    \degree, Pseq([0,2,4], 2)
+    ).play;
 )
 ::
 
