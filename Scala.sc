@@ -56,9 +56,9 @@ Scala : Tuning {
 
 		lastModifiedFile =  lastModifiedFile ? (data +/+ "Last-Modified.txt");
 		//"forceUpdate".postln;
-		"curl http://huygens-fokker.org/docs/scales.zip > % && cd % && unzip -aa -u scales.zip".format(data+/+"scales.zip", data).unixCmd({
+		"cd % ; rm scales.zip ;  curl -L https://huygens-fokker.org/docs/scales.zip --output scales.zip && unzip -aa -u scales.zip".format(data).unixCmd({
 			file = File.new(lastModifiedFile, "w");
-			file.write(Date.getDate.rawSeconds);
+			file.write("%".format(Date.getDate.rawSeconds));
 			file.close;
 		});
 	}
@@ -67,7 +67,7 @@ Scala : Tuning {
 	*update {|dir|
 
 		var tmp, data, lastModifiedFile, lastModified, propFile, properties, propArr,
-		dateStr, dateArr, month, time, archiveModified, shouldUpdate, doUpdate;
+		dateStr, dateArr, month, time, archiveModified, shouldUpdate, doUpdate, key;
 
 		tmp = Platform.defaultTempDir;
 		data=dir?defaultDir;
@@ -89,6 +89,10 @@ Scala : Tuning {
 			//	});
 		};
 
+		doUpdate.();
+
+
+		// Checking if we should update doesn't work because of a 301 responce, so just update
 
 		// check if we should update
 
@@ -98,8 +102,10 @@ Scala : Tuning {
 			propFile = tmp +/+ "scala.txt";
 
 			// get just the header
-			("curl -I http://huygens-fokker.org/docs/scales.zip -D" + propFile).unixCmd({
 
+			//("curl -I -L https://huygens-fokker.org/docs/scales.zip -D %".format(propFile)).unixCmd({
+			("curl --get https://huygens-fokker.org/docs/scales.zip --output % -v -I".
+				format(propFile)).unixCmd({
 
 
 				properties = IdentityDictionary.new;
@@ -113,9 +119,15 @@ Scala : Tuning {
 					// now we've read the propFile, delete it
 					File.delete(propFile);
 
+					//properties.keys.postln;
+					key = "Last-Modified";
+					properties.keys.includes(key.asSymbol).not.if({
+						key = key.toLower;
+					});
+
 
 					// check the date in the header
-					dateArr = properties.at("Last-Modified".asSymbol);
+					dateArr = properties.at(key.asSymbol);
 					dateArr = dateArr.collect({|i| i.stripWhiteSpace});
 					dateArr = dateArr.collect({|i| i.split($ )}).flatten;
 
@@ -153,8 +165,13 @@ Scala : Tuning {
 			});
 
 		}, { doUpdate.();})
+
 	}
 
+	*install {|dir|
+
+		Scala.update(dir);
+	}
 
 
 	initOpen{ arg pathname;

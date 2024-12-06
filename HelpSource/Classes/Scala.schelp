@@ -13,6 +13,16 @@ link::http://www.huygens-fokker.org/scala/scl_format.html::
 
 CLASSMETHODS::
 
+METHOD:: install
+You must run this method or manually install the scale library in order to use this Class.
+
+ARGUMENT:: dir
+You can optionally specify the directory you would like to use to hold your scale directory or leave this blank you use the default path, which is in Scala.defaultDir
+
+DISCUSSION::
+Requires curl and unzip, both of which come with Mac and Linux.
+USers who do not have those programs will have to manually download and unzip https://huygens-fokker.org/docs/scales.zip
+
 METHOD:: open
 a more intiutive syntax for opening a Scala file
 
@@ -29,10 +39,10 @@ path to the Scala file.
 
 
 METHOD:: update
-Checks if the local copy of the scale library is the latest and downsloads a new copy if not
+Checks if the local copy of the scale library is the latest and downsloads a new copy from  https://huygens-fokker.org/docs/scales.zip if not
 ARGUMENT:: dir
 Optionally specify a different directory
-DISCUSSION:
+DISCUSSION::
 Requires curl and unzip, both of which come with Mac and Linux.
 
 INSTANCEMETHODS::
